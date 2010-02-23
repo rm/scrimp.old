@@ -16,7 +16,7 @@
 
 
 (defclass word-feature ()
-  ((word       
+  ((word
     :initarg :word
     :accessor word
     :initform (error "Must supply :word")
@@ -112,7 +112,7 @@ weight we give that assumed probability."
 
 (defun fisher (probs number-of-probs)
   "The Fisher computation described by Robinson."
-  (inverse-chi-square 
+  (inverse-chi-square
    (* -2 (reduce #'+ probs :key #'log))
    (* 2 number-of-probs)))
 
@@ -123,7 +123,7 @@ Based on Gary Robinson's Python implementation."
   ;; Due to rounding errors in the multiplication and exponentiation
   ;; the sum computed in the loop may end up a shade above 1.0 which
   ;; we can't have since it's supposed to represent a probability.
-  (min 
+  (min
    (loop with m = (/ value 2)
       for i below (/ degrees-of-freedom 2)
       for prob = (exp (- m)) then (* prob (/ m i))
@@ -167,14 +167,14 @@ Based on Gary Robinson's Python implementation."
         (destructuring-bind (file type) (aref corpus idx)
           (multiple-value-bind (classification score)
               (classify (start-of-file file *max-chars*))
-            (list 
+            (list
              :file file
              :type type
              :classification classification
              :score score)))))
 
 (defun nshuffle-vector (vector)
-  "Shuffle a vector in place using Fisher-Yates algorithm." 
+  "Shuffle a vector in place using Fisher-Yates algorithm."
   (loop for idx downfrom (1- (length vector)) to 1
         for other = (random (1+ idx))
         do (unless (= idx other)
@@ -225,7 +225,7 @@ Based on Gary Robinson's Python implementation."
   (eql (result-type result) 'correct))
 
 (defun analyze-results (results)
-  (let* ((keys '(total correct false-positive 
+  (let* ((keys '(total correct false-positive
                  false-negative missed-ham missed-spam))
          (counts (loop for x in keys collect (cons x 0))))
     (dolist (item results)
@@ -249,7 +249,7 @@ Based on Gary Robinson's Python implementation."
   (format t "~&~a" file)
   (format t "~2%~a~2%" text)
   (format t "Classified as ~a with score of ~,5f~%" classification score))
-  
+
 (defun show-feature (feature)
   (with-slots (word ham-count spam-count) feature
     (format
